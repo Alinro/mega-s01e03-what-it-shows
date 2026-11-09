@@ -15,6 +15,10 @@ Booking-v3 displays `MM/DD/YYYY` below its date field, but parses the submitted 
 
 Make the format hint agree with input validation and parsing for the tenant's locale. Verify all three affected booking-v3 tenants, including browsers set to another locale, an ambiguous date such as 06/08/2026, an unambiguous day above 12 and invalid input. Following the displayed hint must preserve the intended date through booking confirmation and calendar invite. Check booking-v2 for regressions.
 
-Do not mark this as a duplicate of the shared-parser issue. A parser-only fix does not correct contradictory instructions on the form. Keep open until verified; the export contains no successful fix evidence.
+Do not mark this as a duplicate of the shared-parser issue. A parser-only fix does not correct contradictory instructions on the form.
+
+## Engineering outcome
+
+After the course accepted this allocation, its challenge page reported #4471 closed on 5 October: hint WON'T FIX, booking-v3 form retired. Close this issue as not planned because the affected form was retired. Do not call this a fixed hint. This review did not independently verify retirement or a replacement form. Source: https://hq.mega.dev/challenges/what-it-shows; transcription in `docs/engineering-update.md`.
 
 See `src/routes/kb/incidents/4471-review/+page.svx` and `rendered/kb/incidents/4471-review/index.html`. This is a snapshot count; refresh reports and tenants before using it for the current queue.

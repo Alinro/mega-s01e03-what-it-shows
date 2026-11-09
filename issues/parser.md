@@ -17,6 +17,8 @@ Five IDs are included in this classifier-based count but describe one-day or tim
 
 Preserve the intended day/month semantics for each tenant at input boundaries. Verify app, email and booking-v2 form paths with day-first locales, ambiguous dates such as 07/04/2026, dates whose day exceeds 12, invalid dates and round trips to calendar invites. Inspect booking-v3 app/email paths separately from its form hint. Reconcile the five anomalous reports before claiming this issue covers every symptom.
 
-The export says the fix is queued; it contains no proof that a fix shipped or passed these checks. Keep this issue open pending verification.
+## Engineering outcome
+
+After the course accepted this allocation, its challenge page reported #4471 closed on 5 October: parser FIXED, `fix(dates): parse dd/mm for eu locales`. Close this issue as completed on that desk-reported outcome. This review did not implement or independently test the product fix. The five anomalous reports remain unresolved evidence for follow-up if the symptoms recur. Source: https://hq.mega.dev/challenges/what-it-shows; transcription in `docs/engineering-update.md`.
 
 See `src/routes/kb/incidents/4471-review/+page.svx` and `rendered/kb/incidents/4471-review/index.html`. Counts describe the exported snapshot, not today's live queue. Refresh reports and tenants before quoting a current total.

@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 review · two causes behind the date reports'
 owner: Alin Dumitru
-status: reviewed snapshot; fixes unverified
+status: closed; parser fixed, hint won't fix
 reviewed: '2026-11-09'
 signature: 'Alin Dumitru · Codex · S01E03'
 ---
@@ -16,10 +16,19 @@ signature: 'Alin Dumitru · Codex · S01E03'
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
 
-The [original #4471 page](/kb/incidents/4471/) calls this one known parser issue with one fix queued. Its own components show two causes. A parser fix alone cannot fix the booking form's misleading hint. Neither fix has been verified in this export.
+The [original #4471 page](/kb/incidents/4471/) calls this one known parser issue with one fix queued. Its own components show two causes. The course's later engineering update closes #4471 on 5 October with different outcomes for each cause.
+
+## Engineering outcome · 5 October
+
+| Cause | Desk outcome | GitHub ticket |
+| --- | --- | --- |
+| parser | **Fixed** — `fix(dates): parse dd/mm for eu locales` | [#1 · completed](https://github.com/Alinro/mega-s01e03-what-it-shows/issues/1) |
+| hint | **Won't fix** — booking-v3 form retired | [#2 · not planned](https://github.com/Alinro/mega-s01e03-what-it-shows/issues/2) |
+
+Source: the engineering update on the [course challenge page](https://hq.mega.dev/challenges/what-it-shows), transcribed in `docs/engineering-update.md`. The parser is reported fixed; the hint was retired, not repaired. These are desk-reported outcomes. No product code or test logs were supplied for independent verification.
 
 <Callout kind="warn">
-This review uses the export dated 2026-10-04. The desk continues to receive reports. Refresh the report and tenant exports before using these counts for today's queue or claiming either problem is fixed.
+The counts and rendered components below use the export dated 2026-10-04, before closure. They retain that historical allocation, including the table's “no ticket of its own” label. The separate tickets and the 5 October outcomes are recorded above. Refresh report and tenant data before quoting a current queue count.
 </Callout>
 
 ## Count once, then classify by tenant and entry path
@@ -30,21 +39,21 @@ Look up the report's tenant in the tenant directory. Use its locale and booking-
 
 ### Parser: the shared parser reads month first
 
-Day-first dates arriving through app, email, or booking-v2 are interpreted month first. For example, R-41200 reports 7 April becoming 4 July. Preserve day/month semantics using the tenant's locale or an unambiguous structured date at the input boundary. Check app, email and booking-v2 paths, including ambiguous dates and invalid month/day combinations, before marking fixed.
+In the exported incident, day-first dates arriving through app, email, or booking-v2 were interpreted month first. For example, R-41200 reports 7 April becoming 4 July. The desk now reports the dd/mm parsing fix. Suggested verification covers app, email and booking-v2 paths, including ambiguous dates and invalid month/day combinations; this review did not run product tests.
 
 ### Hint: booking-v3 prints the wrong format
 
-The booking-v3 hint says `MM/DD/YYYY`, but the form reads dates in the tenant's day-first locale. A person following the hint can therefore submit a date that the form interprets differently. R-41241 is an alder.physio form report, even though its browser locale is en-US. Align the displayed hint, validation and parsing with the tenant's locale. Check all three affected booking-v3 tenants, including a browser locale different from the tenant locale.
+In the exported incident, booking-v3's hint said `MM/DD/YYYY`, but the form read dates in the tenant's day-first locale. A person following the hint could submit a date that the form interpreted differently. R-41241 is an alder.physio form report, even though its browser locale is en-US. The desk chose not to fix the hint because booking-v3 was retired. Any replacement form should keep its hint, validation and parsing consistent with the tenant's locale.
 
 Fixes and verification belong in separate GitHub issues in this repository; their bodies are in `issues/parser.md` and `issues/hint.md`. The analysis file lists every report ID allocated to each issue.
 
 <AuditSummary />
 
-## The queue is still moving
+## The queue before closure
 
 <QueueTimeline ticket={4471} />
 
-The chart compares received and merged timestamps by week. A merge date is not an onset date or proof of a new incident. The export reaches 4 October; it is not a live service view.
+The chart compares received and merged timestamps by week. A merge date is not an onset date or proof of a new incident. The export reaches 4 October, before the reported 5 October closure; it is not a live service view.
 
 ## Change the desk's next action
 
@@ -56,8 +65,8 @@ Match reports by verified cause and affected path. Equal subject lines can hide 
 
 This explorer runs the supplied cause logic. It does not validate report bodies or prove a product fix. In particular, the one-day/timing reports above still need investigation.
 
-## Recheck before closing
+## Closure and follow-up
 
-Refresh the exports, recompute unique IDs and groups, read unmatched or contradictory reports, and verify each fix against its own entry paths. Resolve the one-day/timing anomalies separately if evidence confirms a different cause. Close or mark known only with evidence; keep the two cause-specific issues open until their acceptance checks pass.
+The course accepted the two ticket allocations. The later desk update supports closing parser as completed and hint as not planned. Preserve those distinct reasons: a retired form is not a fixed hint. The five one-day/timing anomalies remain unresolved evidence in the historical allocation; closure alone does not explain them. Investigate any recurrence using refreshed reports, tenant data and body evidence rather than automatically merging into a closed ticket.
 
 <RenderStamp {signature} />
