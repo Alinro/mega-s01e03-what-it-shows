@@ -1,0 +1,34 @@
+---
+layout: runbook
+title: '0002 · Deduplicate by evidenced cause and entry path'
+owner: Alin Dumitru
+status: accepted for this kb revision
+reviewed: '2026-11-09'
+signature: 'Alin Dumitru · Codex · S01E03'
+---
+
+<script>
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+**Replaces:** [0001 · Duplicates share a subject line](/kb/decisions/0001-dedupe-by-subject/). That accepted record remains unchanged.
+
+## Context
+
+The [#4471 review](/kb/incidents/4471-review/) shows that a single subject can conceal different date failures. The supplied explorer also shows that different subjects can share a cause. Browser metadata and intake tags can disagree with the tenant's actual locale and form.
+
+## Decision
+
+Deduplicate by evidenced cause and affected entry path. Read the body, resolve the tenant's locale and form version, and check the report channel. Use `causeOf` and the cause table to propose a destination; investigate contradictory evidence instead of merging it blindly. Equal subjects alone do not establish a duplicate.
+
+Keep parser and booking-v3 hint reports in separate tickets. A missing tenant or unplaced cause goes to investigation. One-day/timing reports retain their documented allocation until evidence supports reassignment; they must not disappear into a claim that a parser fix covers them.
+
+Preserve stable report IDs and received timestamps. Count each report ID once, record moves, and refresh the exported data before quoting a current count. Intake tags remain useful audit evidence but do not override the tenant directory.
+
+## Consequences
+
+The desk must read and look up reports before merging. The extra work prevents unrelated failures from being hidden under one known issue. Updating this kb revision does not prove the live desk adopted it or that either product fix shipped; verify both separately.
+
+The triage page follows this decision. Any later change to this accepted record needs a new decision rather than editing its history.
+
+<RenderStamp {signature} />

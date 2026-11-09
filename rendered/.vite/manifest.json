@@ -1,0 +1,8 @@
+{
+  "src/client.js": {
+    "file": "assets/client-D3smeNbq.js",
+    "name": "client",
+    "src": "src/client.js",
+    "isEntry": true
+  }
+}

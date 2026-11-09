@@ -1,0 +1,38 @@
+---
+layout: runbook
+title: 'Triage: duplicate reports'
+owner: support desk
+status: current in this kb revision
+reviewed: '2026-11-09'
+signature: 'Alin Dumitru · Codex · S01E03'
+---
+
+<script>
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+Keep one ticket per evidenced problem. [Decision 0002](/kb/decisions/0002-dedupe-by-cause/) replaces subject-only matching. [Decision 0001](/kb/decisions/0001-dedupe-by-subject/) is preserved as history.
+
+## The rule
+
+1. Read the body and resolve the tenant in the tenant directory. Check its locale and form version, and the report's channel.
+2. Compare cause and affected path with existing tickets. Same subject alone is insufficient; different subjects can still be duplicates.
+3. For #4471, keep the shared-parser and booking-v3 hint failures apart. Use the [review](/kb/incidents/4471-review/) and classifier to check allocation.
+4. Investigate unknown tenants, contradictory descriptions and one-day/timing anomalies. Do not merge them automatically because a subject matches.
+5. Preserve the report ID, received time and move history. Deduplicate export rows by ID, then count. Refresh the export before claiming a current queue total.
+
+<Callout>
+The explorer is a classification aid, not a substitute for reading the evidence. A component's classification does not prove a fix or resolve contradictory report bodies.
+</Callout>
+
+## Try it
+
+<DedupeExplorer />
+
+## When you are unsure
+
+Keep the report available for investigation. Record what is unknown and what evidence is needed before merging it into a known issue.
+
+<RenderStamp {signature} />

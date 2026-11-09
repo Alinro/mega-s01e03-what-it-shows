@@ -1,0 +1,63 @@
+---
+layout: runbook
+title: '#4471 review · two causes behind the date reports'
+owner: Alin Dumitru
+status: reviewed snapshot; fixes unverified
+reviewed: '2026-11-09'
+signature: 'Alin Dumitru · Codex · S01E03'
+---
+
+<script>
+  import AuditSummary from '#lib/kb/AuditSummary.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+The [original #4471 page](/kb/incidents/4471/) calls this one known parser issue with one fix queued. Its own components show two causes. A parser fix alone cannot fix the booking form's misleading hint. Neither fix has been verified in this export.
+
+<Callout kind="warn">
+This review uses the export dated 2026-10-04. The desk continues to receive reports. Refresh the report and tenant exports before using these counts for today's queue or claiming either problem is fixed.
+</Callout>
+
+## Count once, then classify by tenant and entry path
+
+<CauseTable ticket={4471} />
+
+Look up the report's tenant in the tenant directory. Use its locale and booking-form version, together with the report's channel. Browser locale and intake tags are guesses, not the source of truth. All tenants in this snapshot write day first; form submissions on booking-v3 belong to hint, and the remaining app/email/booking-v2 paths belong to parser under the supplied classifier.
+
+### Parser: the shared parser reads month first
+
+Day-first dates arriving through app, email, or booking-v2 are interpreted month first. For example, R-41200 reports 7 April becoming 4 July. Preserve day/month semantics using the tenant's locale or an unambiguous structured date at the input boundary. Check app, email and booking-v2 paths, including ambiguous dates and invalid month/day combinations, before marking fixed.
+
+### Hint: booking-v3 prints the wrong format
+
+The booking-v3 hint says `MM/DD/YYYY`, but the form reads dates in the tenant's day-first locale. A person following the hint can therefore submit a date that the form interprets differently. R-41241 is an alder.physio form report, even though its browser locale is en-US. Align the displayed hint, validation and parsing with the tenant's locale. Check all three affected booking-v3 tenants, including a browser locale different from the tenant locale.
+
+Fixes and verification belong in separate GitHub issues in this repository; their bodies are in `issues/parser.md` and `issues/hint.md`. The analysis file lists every report ID allocated to each issue.
+
+<AuditSummary />
+
+## The queue is still moving
+
+<QueueTimeline ticket={4471} />
+
+The chart compares received and merged timestamps by week. A merge date is not an onset date or proof of a new incident. The export reaches 4 October; it is not a live service view.
+
+## Change the desk's next action
+
+[Decision 0002](/kb/decisions/0002-dedupe-by-cause/) replaces subject-only deduplication. The [triage page](/kb/triage/dedupe/) now uses that rule. The accepted decision 0001 remains unchanged as history; its 2024 review date is stale and does not establish current behavior. This review's date records when we checked the export, not when the desk or the product was fixed.
+
+Match reports by verified cause and affected path. Equal subject lines can hide different problems; different subjects can describe the same cause. Missing tenant data or conflicting body evidence requires investigation rather than an automatic merge. Keep new hint reports out of the parser queue. Preserve received timestamps, report IDs and evidence when moving reports, so the count remains auditable.
+
+<DedupeExplorer />
+
+This explorer runs the supplied cause logic. It does not validate report bodies or prove a product fix. In particular, the one-day/timing reports above still need investigation.
+
+## Recheck before closing
+
+Refresh the exports, recompute unique IDs and groups, read unmatched or contradictory reports, and verify each fix against its own entry paths. Resolve the one-day/timing anomalies separately if evidence confirms a different cause. Close or mark known only with evidence; keep the two cause-specific issues open until their acceptance checks pass.
+
+<RenderStamp {signature} />
